@@ -17,10 +17,10 @@ export default function EditReport() {
 
   const fetchDetail = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/api/laporan/${id}`)
+      const res = await axios.get(`https://backend-pengaduan-production.up.railway.app/api/laporan/${id}`)
       setTitle(res.data.title)
       setDescription(res.data.description)
-      if (res.data.image) setPreview(`http://localhost:3000/uploads/${res.data.image}`)
+      if (res.data.image) setPreview(`https://backend-pengaduan-production.up.railway.app/uploads/${res.data.image}`)
     } catch (err) { console.log(err) }
   }
 
@@ -36,7 +36,7 @@ export default function EditReport() {
       formData.append("title", title.trim())
       formData.append("description", description.trim())
       if (image) formData.append("image", image)
-      await axios.put(`http://localhost:3000/api/laporan/${id}`, formData, {
+      await axios.put(`https://backend-pengaduan-production.up.railway.app/api/laporan/${id}`, formData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       })
       toast.success("Laporan berhasil diupdate")

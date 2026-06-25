@@ -16,7 +16,7 @@ export default function Register() {
     e.preventDefault()
     setLoading(true); setError("")
     try {
-      await axios.post("http://localhost:3000/api/auth/register", { name, email, password })
+      await axios.post("https://backend-pengaduan-production.up.railway.app/api/auth/register", { name, email, password })
       navigate("/login")
     } catch { setError("Registrasi gagal. Email mungkin sudah terdaftar.") }
     finally { setLoading(false) }

@@ -15,7 +15,7 @@ export default function UserLayout() {
 
   const fetchNotifications = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/notifications", {
+      const res = await axios.get("https://backend-pengaduan-production.up.railway.app/api/notifications", {
         headers: { Authorization: `Bearer ${token}` }
       })
       setNotifications(res.data)
@@ -30,7 +30,7 @@ export default function UserLayout() {
 
   const readNotification = async (id) => {
     try {
-      await axios.put(`http://localhost:3000/api/notifications/${id}`, {}, {
+      await axios.put(`https://backend-pengaduan-production.up.railway.app/api/notifications/${id}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       })
       fetchNotifications()
@@ -235,7 +235,7 @@ export default function UserLayout() {
               boxShadow:"0 2px 12px rgba(0,0,0,.06)"
             }}>
               <img
-                src={user?.photo ? `http://localhost:3000/uploads/${user.photo}` : "https://i.pravatar.cc/100"}
+                src={user?.photo ? `https://backend-pengaduan-production.up.railway.app/uploads/${user.photo}` : "https://i.pravatar.cc/100"}
                 alt=""
                 style={{ width:40, height:40, borderRadius:10, objectFit:"cover", border:"2px solid #F5D5D5" }}
               />

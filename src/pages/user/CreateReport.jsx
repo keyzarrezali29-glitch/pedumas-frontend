@@ -104,7 +104,7 @@ export default function CreateReport() {
   const token = localStorage.getItem("token")
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/categories")
+    axios.get("https://backend-pengaduan-production.up.railway.app/api/categories")
       .then(res => setCategories(res.data))
       .catch(err => console.log(err))
   }, [])
@@ -153,7 +153,7 @@ export default function CreateReport() {
       formData.append("category_id", form.category_id)
       formData.append("location", location)
       if (image) formData.append("image", image)
-      await axios.post("http://localhost:3000/api/laporan", formData, {
+      await axios.post("https://backend-pengaduan-production.up.railway.app/api/laporan", formData, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" }
       })
       toast.success("Laporan berhasil dikirim")

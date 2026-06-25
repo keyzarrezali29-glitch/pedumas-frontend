@@ -22,10 +22,10 @@ export default function ProfileSuperAdmin() {
     if (password) formData.append("password", password)
     if (photo) formData.append("photo", photo)
     try {
-      await axios.put("http://localhost:3000/api/users/profile", formData, {
+      await axios.put("https://backend-pengaduan-production.up.railway.app/api/users/profile", formData, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" }
       })
-      const profileRes = await axios.get("http://localhost:3000/api/users/profile", {
+      const profileRes = await axios.get("https://backend-pengaduan-production.up.railway.app/api/users/profile", {
         headers: { Authorization: `Bearer ${token}` }
       })
       localStorage.setItem("user", JSON.stringify(profileRes.data))
@@ -75,7 +75,7 @@ export default function ProfileSuperAdmin() {
         <div style={{ background:"white", borderRadius:24, padding:28, border:`1.5px solid ${R.light}`, boxShadow:"0 4px 20px rgba(0,0,0,.05)", alignSelf:"start" }}>
           <div style={{ display:"flex", flexDirection:"column", alignItems:"center", textAlign:"center" }}>
             <div style={{ position:"relative", marginBottom:20 }}>
-              <img src={user.photo ? `http://localhost:3000/uploads/${user.photo}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name||"S")}&background=7B0D1E&color=fff&size=160`}
+              <img src={user.photo ? `https://backend-pengaduan-production.up.railway.app/uploads/${user.photo}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name||"S")}&background=7B0D1E&color=fff&size=160`}
                 alt="" style={{ width:120, height:120, borderRadius:"50%", objectFit:"cover", border:`4px solid ${R.light}` }} />
               <div style={{ position:"absolute", bottom:4, right:4, background:R.main, borderRadius:"50%", padding:8, display:"flex" }}>
                 <Camera size={14} color="white" />

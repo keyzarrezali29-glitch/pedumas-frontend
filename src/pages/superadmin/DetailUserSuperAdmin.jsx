@@ -18,7 +18,7 @@ export default function DetailUserSuperAdmin() {
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/users", {
+      const res = await axios.get("https://backend-pengaduan-production.up.railway.app/api/users", {
         headers: { Authorization: `Bearer ${token}` }
       })
       const found = res.data.find(u => String(u.id) === String(id))
@@ -28,7 +28,7 @@ export default function DetailUserSuperAdmin() {
 
   const fetchActivities = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/activity", {
+      const res = await axios.get("https://backend-pengaduan-production.up.railway.app/api/activity", {
         headers: { Authorization: `Bearer ${token}` }
       })
       const userActivities = res.data.filter(a => String(a.user_id) === String(id))
@@ -38,7 +38,7 @@ export default function DetailUserSuperAdmin() {
 
   const fetchReports = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/laporan", {
+      const res = await axios.get("https://backend-pengaduan-production.up.railway.app/api/laporan", {
         headers: { Authorization: `Bearer ${token}` }
       })
       const userReports = res.data.filter(r => String(r.user_id) === String(id))
@@ -55,7 +55,7 @@ export default function DetailUserSuperAdmin() {
   const handleDelete = async () => {
     if (!window.confirm(`Hapus akun ${user?.name}?`)) return
     try {
-      await axios.delete(`http://localhost:3000/api/users/${id}`, {
+      await axios.delete(`https://backend-pengaduan-production.up.railway.app/api/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       toast.success("User berhasil dihapus")
@@ -100,7 +100,7 @@ export default function DetailUserSuperAdmin() {
           <div style={{ display:"flex", alignItems:"center", gap:20 }}>
             <div style={{ width:80, height:80, borderRadius:"50%", background:"rgba(255,255,255,.2)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
               {user.photo ? (
-                <img src={`http://localhost:3000/uploads/${user.photo}`} alt="" style={{ width:80, height:80, borderRadius:"50%", objectFit:"cover" }} />
+                <img src={`https://backend-pengaduan-production.up.railway.app/uploads/${user.photo}`} alt="" style={{ width:80, height:80, borderRadius:"50%", objectFit:"cover" }} />
               ) : (
                 <span style={{ color:"white", fontWeight:800, fontSize:32 }}>{user.name?.charAt(0)?.toUpperCase()}</span>
               )}
@@ -136,7 +136,7 @@ export default function DetailUserSuperAdmin() {
             <div style={{ display:"flex", flexDirection:"column", alignItems:"center", marginBottom:20 }}>
               <div style={{ width:100, height:100, borderRadius:"50%", border:`4px solid ${R.light}`, overflow:"hidden", marginBottom:12, background:`linear-gradient(135deg,${R.main},${R.mid})`, display:"flex", alignItems:"center", justifyContent:"center" }}>
                 {user.photo ? (
-                  <img src={`http://localhost:3000/uploads/${user.photo}`} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+                  <img src={`https://backend-pengaduan-production.up.railway.app/uploads/${user.photo}`} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} />
                 ) : (
                   <span style={{ color:"white", fontWeight:800, fontSize:36 }}>{user.name?.charAt(0)?.toUpperCase()}</span>
                 )}

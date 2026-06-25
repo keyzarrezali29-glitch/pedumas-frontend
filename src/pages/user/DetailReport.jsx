@@ -16,14 +16,14 @@ export default function DetailReport() {
 
   const fetchDetail = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/api/laporan/${id}`)
+      const res = await axios.get(`https://backend-pengaduan-production.up.railway.app/api/laporan/${id}`)
       setReport(res.data)
     } catch (err) { console.log(err) }
   }
 
   const fetchComments = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/api/comment/${id}`)
+      const res = await axios.get(`https://backend-pengaduan-production.up.railway.app/api/comment/${id}`)
       setComments(res.data)
     } catch (err) { console.log(err) }
   }
@@ -36,7 +36,7 @@ export default function DetailReport() {
     if (!token) { toast.error("Silahkan login dulu"); return }
     setLoading(true)
     try {
-      await axios.post("http://localhost:3000/api/comment",
+      await axios.post("https://backend-pengaduan-production.up.railway.app/api/comment",
         { laporan_id: Number(id), comment: comment.trim(), parent_id: null },
         { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
       )
@@ -83,7 +83,7 @@ export default function DetailReport() {
 
           {report.image && (
             <div style={{ borderRadius:20, overflow:"hidden", boxShadow:"0 8px 32px rgba(123,13,30,.15)" }}>
-              <img src={`http://localhost:3000/uploads/${report.image}`} alt=""
+              <img src={`https://backend-pengaduan-production.up.railway.app/uploads/${report.image}`} alt=""
                 style={{ width:"100%", height:320, objectFit:"cover", display:"block" }} />
             </div>
           )}

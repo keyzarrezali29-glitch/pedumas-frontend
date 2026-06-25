@@ -19,7 +19,7 @@ export default function DetailPengaduan() {
 
   const fetchDetail = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/api/laporan/${id}`)
+      const res = await axios.get(`https://backend-pengaduan-production.up.railway.app/api/laporan/${id}`)
       setReport(res.data); setStatus(res.data.status); setResponse(res.data.response || "")
     } catch { toast.error("Gagal mengambil detail") }
   }
@@ -28,7 +28,7 @@ export default function DetailPengaduan() {
 
   const updateReport = async () => {
     try {
-      await axios.put(`http://localhost:3000/api/laporan/status/${id}`, { status, response }, {
+      await axios.put(`https://backend-pengaduan-production.up.railway.app/api/laporan/status/${id}`, { status, response }, {
         headers: { Authorization: `Bearer ${token}` }
       })
       toast.success("Laporan berhasil diupdate"); fetchDetail()
@@ -157,7 +157,7 @@ export default function DetailPengaduan() {
 
           {report.image && (
             <div style={{ borderRadius:20, overflow:"hidden", boxShadow:"0 8px 32px rgba(123,13,30,.15)" }}>
-              <img src={`http://localhost:3000/uploads/${report.image}`} alt="" style={{ width:"100%", height:300, objectFit:"cover", display:"block" }} />
+              <img src={`https://backend-pengaduan-production.up.railway.app/uploads/${report.image}`} alt="" style={{ width:"100%", height:300, objectFit:"cover", display:"block" }} />
             </div>
           )}
 

@@ -22,7 +22,7 @@ export default function ProfileUser() {
     if (password) formData.append("password", password)
     if (photo) formData.append("photo", photo)
     try {
-      const res = await axios.put("http://localhost:3000/api/auth/profile", formData, {
+      const res = await axios.put("https://backend-pengaduan-production.up.railway.app/api/auth/profile", formData, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" }
       })
       localStorage.setItem("user", JSON.stringify(res.data.user))
@@ -85,7 +85,7 @@ export default function ProfileUser() {
 
             <div style={{ position:"relative", marginBottom:20 }}>
               <img
-                src={user.photo ? `http://localhost:3000/uploads/${user.photo}` : `https://ui-avatars.com/api/?name=${user.name}&background=B22222&color=fff&size=160`}
+                src={user.photo ? `https://backend-pengaduan-production.up.railway.app/uploads/${user.photo}` : `https://ui-avatars.com/api/?name=${user.name}&background=B22222&color=fff&size=160`}
                 alt="" style={{ width:120, height:120, borderRadius:"50%", objectFit:"cover", border:`4px solid ${R.light}` }} />
               <div style={{ position:"absolute", bottom:4, right:4, background:R.main, borderRadius:"50%", padding:8, display:"flex" }}>
                 <Camera size={14} color="white" />

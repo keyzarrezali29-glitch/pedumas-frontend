@@ -24,7 +24,7 @@ export default function DashboardSuperAdmin() {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/users", {
+      const res = await axios.get("https://backend-pengaduan-production.up.railway.app/api/users", {
         headers: { Authorization: `Bearer ${token}` }
       })
       setUsers(res.data)
@@ -33,7 +33,7 @@ export default function DashboardSuperAdmin() {
 
   const fetchActivities = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/activity")
+      const res = await axios.get("https://backend-pengaduan-production.up.railway.app/api/activity")
       setActivities(res.data)
     } catch (err) { console.log(err) }
   }
@@ -53,7 +53,7 @@ export default function DashboardSuperAdmin() {
   const handleAddAdmin = async (e) => {
     e.preventDefault()
     try {
-      await axios.post("http://localhost:3000/api/users/admin", { name, email, password }, {
+      await axios.post("https://backend-pengaduan-production.up.railway.app/api/users/admin", { name, email, password }, {
         headers: { Authorization: `Bearer ${token}` }
       })
       toast.success("Admin berhasil ditambahkan")
@@ -65,7 +65,7 @@ export default function DashboardSuperAdmin() {
   const handleDelete = async (id) => {
     if (!window.confirm("Hapus user ini?")) return
     try {
-      await axios.delete(`http://localhost:3000/api/users/${id}`, {
+      await axios.delete(`https://backend-pengaduan-production.up.railway.app/api/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       toast.success("User berhasil dihapus")

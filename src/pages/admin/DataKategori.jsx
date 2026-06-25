@@ -14,7 +14,7 @@ export default function DataKategori() {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/categories")
+      const res = await axios.get("https://backend-pengaduan-production.up.railway.app/api/categories")
       setCategories(res.data)
     } catch { toast.error("Gagal mengambil kategori") }
   }
@@ -30,10 +30,10 @@ export default function DataKategori() {
     if (!name.trim()) { toast.error("Nama kategori wajib diisi"); return }
     try {
       if (editId) {
-        await axios.put(`http://localhost:3000/api/categories/${editId}`, { name })
+        await axios.put(`https://backend-pengaduan-production.up.railway.app/api/categories/${editId}`, { name })
         toast.success("Kategori berhasil diupdate")
       } else {
-        await axios.post("http://localhost:3000/api/categories", { name })
+        await axios.post("https://backend-pengaduan-production.up.railway.app/api/categories", { name })
         toast.success("Kategori berhasil ditambahkan")
       }
       setName(""); setEditId(null); setOpenModal(false); fetchCategories()
@@ -43,7 +43,7 @@ export default function DataKategori() {
   const deleteCategory = async (id) => {
     if (!window.confirm("Yakin hapus kategori?")) return
     try {
-      await axios.delete(`http://localhost:3000/api/categories/${id}`)
+      await axios.delete(`https://backend-pengaduan-production.up.railway.app/api/categories/${id}`)
       toast.success("Kategori berhasil dihapus"); fetchCategories()
     } catch { toast.error("Gagal menghapus kategori") }
   }

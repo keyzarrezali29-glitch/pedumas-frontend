@@ -16,7 +16,7 @@ export default function ReportsUser() {
   const fetchReports = async () => {
     try {
       const token = localStorage.getItem("token")
-      const res = await axios.get("http://localhost:3000/api/laporan/my-reports", {
+      const res = await axios.get("https://backend-pengaduan-production.up.railway.app/api/laporan/my-reports", {
         headers: { Authorization: `Bearer ${token}` }
       })
       setReports(res.data)
@@ -29,7 +29,7 @@ export default function ReportsUser() {
     if (!window.confirm("Yakin hapus laporan?")) return
     try {
       const token = localStorage.getItem("token")
-      await axios.delete(`http://localhost:3000/api/laporan/${id}`, {
+      await axios.delete(`https://backend-pengaduan-production.up.railway.app/api/laporan/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       toast.success("Laporan berhasil dihapus")
@@ -112,7 +112,7 @@ export default function ReportsUser() {
               onMouseLeave={e => { e.currentTarget.style.transform="translateY(0)"; e.currentTarget.style.boxShadow="0 4px 20px rgba(0,0,0,.05)" }}
             >
               {report.image && (
-                <img src={`http://localhost:3000/uploads/${report.image}`} alt=""
+                <img src={`https://backend-pengaduan-production.up.railway.app/uploads/${report.image}`} alt=""
                   style={{ width:"100%", height:200, objectFit:"cover" }} />
               )}
               <div style={{ padding:24 }}>

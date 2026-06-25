@@ -16,7 +16,7 @@ export default function DataPelapor() {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem("token")
-      const res = await axios.get("http://localhost:3000/api/users", {
+      const res = await axios.get("https://backend-pengaduan-production.up.railway.app/api/users", {
         headers: { Authorization: `Bearer ${token}` }
       })
       setUsers(res.data)

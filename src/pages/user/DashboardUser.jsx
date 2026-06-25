@@ -15,7 +15,7 @@ export default function DashboardUser() {
 
   const fetchReports = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/laporan/my-reports", {
+      const res = await axios.get("https://backend-pengaduan-production.up.railway.app/api/laporan/my-reports", {
         headers: { Authorization: `Bearer ${token}` }
       })
       setReports(res.data)

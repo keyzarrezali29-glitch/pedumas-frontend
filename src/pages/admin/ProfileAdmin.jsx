@@ -23,12 +23,12 @@ export default function ProfileAdmin() {
     if (photo) formData.append("photo", photo)
     try {
       // UPDATE PROFILE
-      await axios.put("http://localhost:3000/api/users/profile", formData, {
+      await axios.put("https://backend-pengaduan-production.up.railway.app/api/users/profile", formData, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" }
       })
 
       // FETCH ULANG DATA USER TERBARU
-      const profileRes = await axios.get("http://localhost:3000/api/users/profile", {
+      const profileRes = await axios.get("https://backend-pengaduan-production.up.railway.app/api/users/profile", {
         headers: { Authorization: `Bearer ${token}` }
       })
 
@@ -105,7 +105,7 @@ export default function ProfileAdmin() {
             <div style={{ position:"relative", marginBottom:20 }}>
               <img
                 src={user.photo
-                  ? `http://localhost:3000/uploads/${user.photo}`
+                  ? `https://backend-pengaduan-production.up.railway.app/uploads/${user.photo}`
                   : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name||"A")}&background=B22222&color=fff&size=160`
                 }
                 alt=""

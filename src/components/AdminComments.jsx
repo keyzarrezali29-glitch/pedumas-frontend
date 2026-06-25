@@ -42,7 +42,7 @@ export default function AdminComments({
 
         const res =
           await axios.get(
-            `http://localhost:3000/api/comment/${laporanId}`
+            `https://backend-pengaduan-production.up.railway.app/api/comment/${laporanId}`
           )
 
         setComments(res.data)
@@ -77,7 +77,7 @@ export default function AdminComments({
       try {
 
         await axios.post(
-          "http://localhost:3000/api/comment",
+          "https://backend-pengaduan-production.up.railway.app/api/comment",
 
           {
             laporan_id: Number(laporanId),
@@ -125,7 +125,7 @@ export default function AdminComments({
       try {
 
         await axios.delete(
-          `http://localhost:3000/api/comment/${id}`,
+          `https://backend-pengaduan-production.up.railway.app/api/comment/${id}`,
 
           {
             headers: {

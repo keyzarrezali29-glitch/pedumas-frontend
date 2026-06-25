@@ -14,7 +14,7 @@ export default function AdminLayout() {
 
   const fetchNotifications = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/notifications", {
+      const res = await axios.get("https://backend-pengaduan-production.up.railway.app/api/notifications", {
         headers: { Authorization: `Bearer ${token}` }
       })
       setNotifications(res.data)
@@ -29,7 +29,7 @@ export default function AdminLayout() {
 
   const readNotification = async (id) => {
     try {
-      await axios.put(`http://localhost:3000/api/notifications/${id}`, {}, {
+      await axios.put(`https://backend-pengaduan-production.up.railway.app/api/notifications/${id}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       })
       fetchNotifications()
@@ -208,7 +208,7 @@ export default function AdminLayout() {
               onMouseLeave={e => e.currentTarget.style.borderColor="#F5D5D5"}
             >
               <img
-                src={user?.photo ? `http://localhost:3000/uploads/${user.photo}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name||"A")}&background=B22222&color=fff`}
+                src={user?.photo ? `https://backend-pengaduan-production.up.railway.app/uploads/${user.photo}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name||"A")}&background=B22222&color=fff`}
                 alt="" style={{ width:38, height:38, borderRadius:10, objectFit:"cover", border:"2px solid #F5D5D5" }}
               />
               <div>
