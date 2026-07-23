@@ -3,7 +3,7 @@ import {
   useState
 } from "react"
 
-import axios from "axios"
+import api from "@/services/api"
 
 import toast from "react-hot-toast"
 
@@ -41,8 +41,8 @@ export default function AdminComments({
       try {
 
         const res =
-          await axios.get(
-            `https://backend-pengaduan-production.up.railway.app/api/comment/${laporanId}`
+          await api.get(
+            `/api/comment/${laporanId}`
           )
 
         setComments(res.data)
@@ -76,8 +76,8 @@ export default function AdminComments({
 
       try {
 
-        await axios.post(
-          "https://backend-pengaduan-production.up.railway.app/api/comment",
+        await api.post(
+          "/api/comment",
 
           {
             laporan_id: Number(laporanId),
@@ -124,7 +124,7 @@ export default function AdminComments({
 
       try {
 
-        await axios.delete(
+        await api.delete(
           `https://backend-pengaduan-production.up.railway.app/api/comment/${id}`,
 
           {

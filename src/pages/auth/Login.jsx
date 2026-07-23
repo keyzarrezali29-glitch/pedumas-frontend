@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
-import axios from "axios"
+import api from "api"
 import { ShieldCheck, Mail, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react"
 
 export default function Login() {
@@ -15,7 +15,7 @@ export default function Login() {
     e.preventDefault()
     setLoading(true); setError("")
     try {
-      const res = await axios.post("https://backend-pengaduan-production.up.railway.app/api/auth/login", { email, password })
+      const res = await api.post("/api/auth/login", { email, password })
       localStorage.setItem("token", res.data.token)
       localStorage.setItem("user", JSON.stringify(res.data.user))
       const role = res.data.user.role

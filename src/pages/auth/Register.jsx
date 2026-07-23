@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
-import axios from "axios"
+import api from "api"
 import { ShieldCheck, Mail, Lock, User, ArrowLeft, Eye, EyeOff, CheckCircle } from "lucide-react"
 
 export default function Register() {
@@ -16,7 +16,7 @@ export default function Register() {
     e.preventDefault()
     setLoading(true); setError("")
     try {
-      await axios.post("https://backend-pengaduan-production.up.railway.app/api/auth/register", { name, email, password })
+      await api.post("/api/auth/register", { name, email, password })
       navigate("/login")
     } catch { setError("Registrasi gagal. Email mungkin sudah terdaftar.") }
     finally { setLoading(false) }
