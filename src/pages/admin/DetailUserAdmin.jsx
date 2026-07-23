@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import axios from "axios"
+import api from "../../../services/api"
 import { ArrowLeft, User2, Mail, ShieldCheck, Calendar, Crown, Trash2, Activity } from "lucide-react"
 import toast from "react-hot-toast"
 
@@ -18,7 +18,7 @@ export default function DetailUserAdmin() {
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get("https://backend-pengaduan-production.up.railway.app/api/users", {
+      const res = await api.get("/api/users", {
         headers: { Authorization: `Bearer ${token}` }
       })
       const found = res.data.find(u => String(u.id) === String(id))
@@ -28,7 +28,7 @@ export default function DetailUserAdmin() {
 
   const fetchActivities = async () => {
     try {
-      const res = await axios.get("https://backend-pengaduan-production.up.railway.app/api/activity", {
+      const res = await api.get("/api/activity", {
         headers: { Authorization: `Bearer ${token}` }
       })
       const userActivities = res.data.filter(a => String(a.user_id) === String(id))
@@ -38,7 +38,7 @@ export default function DetailUserAdmin() {
 
   const fetchReports = async () => {
     try {
-      const res = await axios.get("https://backend-pengaduan-production.up.railway.app/api/laporan", {
+      const res = await api.get("/api/laporan", {
         headers: { Authorization: `Bearer ${token}` }
       })
       const userReports = res.data.filter(r => String(r.user_id) === String(id))
@@ -55,7 +55,7 @@ export default function DetailUserAdmin() {
   const handleDelete = async () => {
     if (!window.confirm(`Hapus akun ${user?.name}?`)) return
     try {
-      await axios.delete(`https://backend-pengaduan-production.up.railway.app/api/users/${id}`, {
+      await api.delete(`/api/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       toast.success("User berhasil dihapus")

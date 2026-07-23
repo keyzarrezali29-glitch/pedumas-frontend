@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
-import api from "@/services/api"
+import api from "../../../services/api"
 import { ShieldCheck, Mail, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react"
 
 export default function Login() {
