@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { useParams, useNavigate } from "react-router-dom"
-import { MessageCircle, Send, MapPin, ArrowLeft, User, Tag, ExternalLink } from "lucide-react"
+import { MessageCircle, Send, MapPin, ArrowLeft, User, Tag, ExternalLink, Trash2 } from "lucide-react"
 import toast from "react-hot-toast"
 
 const R = { dark:"#7B0D1E", main:"#B22222", mid:"#CD5C5C", soft:"#E8A0A0", light:"#F5D5D5", text:"#1a0505", muted:"#7a3535" }
@@ -13,6 +13,7 @@ export default function DetailReport() {
   const [comment, setComment] = useState("")
   const [comments, setComments] = useState([])
   const [loading, setLoading] = useState(false)
+  const user = JSON.parse(localStorage.getItem("user") || "{}")
 
   const fetchDetail = async () => {
     try {
@@ -46,6 +47,19 @@ export default function DetailReport() {
     } catch (err) {
       toast.error("Gagal kirim komentar")
     } finally { setLoading(false) }
+  }
+
+  const deleteComment = async (commentId) => {
+    const token = localStorage.getItem("token")
+    try {
+      await axios.delete(`https://backend-pengaduan-production.up.railway.app/api/comment/${commentId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      toast.success("Komentar berhasil dihapus")
+      fetchComments()
+    } catch (err) {
+      toast.error("Gagal hapus komentar")
+    }
   }
 
   const statusColor = (s) => ({
@@ -226,14 +240,23 @@ export default function DetailReport() {
             <div style={{ display:"flex", flexDirection:"column", gap:10, maxHeight:400, overflowY:"auto" }}>
               {comments.length > 0 ? comments.map(item => (
                 <div key={item.id} style={{ background:R.light, borderRadius:14, padding:"14px 16px" }}>
-                  <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
-                    <div style={{ width:30, height:30, borderRadius:"50%", background:`linear-gradient(135deg,${R.main},${R.mid})`, display:"flex", alignItems:"center", justifyContent:"center" }}>
-                      <span style={{ color:"white", fontSize:13, fontWeight:700 }}>{item.name?.charAt(0)?.toUpperCase()}</span>
+                  <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:8, marginBottom:6 }}>
+                    <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                      <div style={{ width:30, height:30, borderRadius:"50%", background:`linear-gradient(135deg,${R.main},${R.mid})`, display:"flex", alignItems:"center", justifyContent:"center" }}>
+                        <span style={{ color:"white", fontSize:13, fontWeight:700 }}>{item.name?.charAt(0)?.toUpperCase()}</span>
+                      </div>
+                      <div>
+                        <span style={{ fontSize:13, fontWeight:700, color:R.text }}>{item.name}</span>
+                        {item.role && <span style={{ fontSize:11, color:R.soft, marginLeft:6, fontWeight:500 }}>{item.role}</span>}
+                      </div>
                     </div>
-                    <div>
-                      <span style={{ fontSize:13, fontWeight:700, color:R.text }}>{item.name}</span>
-                      {item.role && <span style={{ fontSize:11, color:R.soft, marginLeft:6, fontWeight:500 }}>{item.role}</span>}
-                    </div>
+                    {Number(item.user_id) === Number(user?.id) && (
+                      <button onClick={() => deleteComment(item.id)} style={{
+                        background:"none", border:"none", cursor:"pointer", color:R.main, flexShrink:0
+                      }}>
+                        <Trash2 size={16} />
+                      </button>
+                    )}
                   </div>
                   <p style={{ fontSize:13, color:R.muted, lineHeight:1.6, paddingLeft:38 }}>{item.comment}</p>
                   {item.created_at && (
