@@ -2,8 +2,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import api from "../../../services/api"
 import { ShieldCheck, Mail, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react"
-import useIsMobile from "../../../hooks/useIsMobile"
-
+import useIsMobile from "../../hooks/useIsMobile"
 export default function Login() {
   const navigate = useNavigate()
   const isMobile = useIsMobile()
