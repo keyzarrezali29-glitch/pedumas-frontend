@@ -2,12 +2,14 @@ import { Outlet, Link, useNavigate, useLocation } from "react-router-dom"
 import { LayoutDashboard, PlusCircle, FileText, User, LogOut, Bell, Menu, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import axios from "axios"
+import useIsMobile from "../hooks/useIsMobile"
 
 export default function UserLayout() {
   const navigate  = useNavigate()
   const location  = useLocation()
   const user      = JSON.parse(localStorage.getItem("user") || "{}")
   const token     = localStorage.getItem("token")
+  const isMobile  = useIsMobile()
 
   const [notifications, setNotifications] = useState([])
   const [showNotif, setShowNotif]         = useState(false)
@@ -61,7 +63,7 @@ export default function UserLayout() {
       `}</style>
 
       {/* MOBILE OVERLAY */}
-      {sidebarOpen && (
+      {isMobile && sidebarOpen && (
         <div onClick={() => setSidebarOpen(false)}
           style={{ position:"fixed", inset:0, background:"rgba(0,0,0,.4)", zIndex:40 }} />
       )}
@@ -72,7 +74,7 @@ export default function UserLayout() {
         background:"linear-gradient(180deg, #7B0D1E 0%, #B22222 60%, #CD5C5C 100%)",
         zIndex:50, display:"flex", flexDirection:"column",
         boxShadow:"4px 0 24px rgba(123,13,30,.25)",
-        transform: sidebarOpen ? "translateX(0)" : undefined,
+        transform: isMobile ? (sidebarOpen ? "translateX(0)" : "translateX(-100%)") : "translateX(0)",
         transition:"transform .3s"
       }}>
 
@@ -83,10 +85,12 @@ export default function UserLayout() {
               <div style={{ color:"white", fontSize:28, fontWeight:800, letterSpacing:"-.02em" }}>PEDUMAS</div>
               <div style={{ color:"rgba(255,255,255,.65)", fontSize:12, marginTop:4 }}>Pengaduan Masyarakat</div>
             </div>
-            <button onClick={() => setSidebarOpen(false)}
-              style={{ background:"none", border:"none", color:"white", cursor:"pointer", display:"none" }}>
-              <X size={20} />
-            </button>
+            {isMobile && (
+              <button onClick={() => setSidebarOpen(false)}
+                style={{ background:"none", border:"none", color:"white", cursor:"pointer" }}>
+                <X size={20} />
+              </button>
+            )}
           </div>
         </div>
 
@@ -94,6 +98,7 @@ export default function UserLayout() {
         <div style={{ padding:"20px 16px", flex:1, display:"flex", flexDirection:"column", gap:4 }}>
           {menus.map((item, i) => (
             <Link key={i} to={item.path}
+              onClick={() => isMobile && setSidebarOpen(false)}
               className={`sidebar-link ${location.pathname === item.path ? "active" : ""}`}>
               {item.icon}
               {item.title}
@@ -120,14 +125,14 @@ export default function UserLayout() {
       </div>
 
       {/* CONTENT */}
-      <div style={{ flex:1, marginLeft:260 }}>
+      <div style={{ flex:1, marginLeft: isMobile ? 0 : 260 }}>
 
         {/* TOPBAR */}
         <div style={{
           position:"sticky", top:0, zIndex:30,
           background:"rgba(255,255,255,.92)", backdropFilter:"blur(20px)",
           borderBottom:"1px solid #F5D5D5",
-          padding:"16px 32px",
+          padding: isMobile ? "16px 16px" : "16px 32px",
           display:"flex", alignItems:"center", justifyContent:"space-between"
         }}>
 
@@ -170,8 +175,12 @@ export default function UserLayout() {
             {/* NOTIF DROPDOWN */}
             {showNotif && (
               <div style={{
-                position:"absolute", top:56, right:0,
-                width:380, background:"white",
+                position: isMobile ? "fixed" : "absolute",
+                top: isMobile ? 70 : 56,
+                right: isMobile ? 12 : 0,
+                left: isMobile ? 12 : "auto",
+                width: isMobile ? "auto" : 380,
+                background:"white",
                 borderRadius:24, boxShadow:"0 20px 60px rgba(0,0,0,.12)",
                 border:"1.5px solid #F5D5D5", overflow:"hidden", zIndex:9999
               }}>
@@ -230,7 +239,8 @@ export default function UserLayout() {
 
             {/* USER */}
             <div style={{
-              background:"white", borderRadius:14, padding:"8px 16px 8px 8px",
+              background:"white", borderRadius:14,
+              padding: isMobile ? "6px 10px 6px 6px" : "8px 16px 8px 8px",
               border:"1.5px solid #F5D5D5", display:"flex", alignItems:"center", gap:12,
               boxShadow:"0 2px 12px rgba(0,0,0,.06)"
             }}>
@@ -239,17 +249,19 @@ export default function UserLayout() {
                 alt=""
                 style={{ width:40, height:40, borderRadius:10, objectFit:"cover", border:"2px solid #F5D5D5" }}
               />
-              <div>
-                <div style={{ fontWeight:700, fontSize:14, color:"#B22222" }}>{user?.name}</div>
-                <div style={{ fontSize:11, color:"#7a3535" }}>User Masyarakat</div>
-              </div>
+              {!isMobile && (
+                <div>
+                  <div style={{ fontWeight:700, fontSize:14, color:"#B22222" }}>{user?.name}</div>
+                  <div style={{ fontSize:11, color:"#7a3535" }}>User Masyarakat</div>
+                </div>
+              )}
             </div>
 
           </div>
         </div>
 
         {/* PAGE CONTENT */}
-        <div style={{ padding:"32px" }}>
+        <div style={{ padding: isMobile ? "16px" : "32px" }}>
           <Outlet />
         </div>
 

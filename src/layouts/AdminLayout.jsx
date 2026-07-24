@@ -1,16 +1,19 @@
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom"
-import { LayoutDashboard, Users, FolderKanban, MessageSquareWarning, LogOut, Bell, ShieldCheck, UserCircle } from "lucide-react"
+import { LayoutDashboard, Users, FolderKanban, MessageSquareWarning, LogOut, Bell, ShieldCheck, UserCircle, Menu, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import axios from "axios"
+import useIsMobile from "../hooks/useIsMobile"
 
 export default function AdminLayout() {
   const navigate  = useNavigate()
   const location  = useLocation()
   const token     = localStorage.getItem("token")
   const user      = JSON.parse(localStorage.getItem("user") || "{}")
+  const isMobile  = useIsMobile()
 
   const [notifications, setNotifications] = useState([])
   const [showNotif, setShowNotif]         = useState(false)
+  const [sidebarOpen, setSidebarOpen]     = useState(false)
 
   const fetchNotifications = async () => {
     try {
@@ -60,29 +63,46 @@ export default function AdminLayout() {
         .notif-item.unread { background:#FFF0F0; }
       `}</style>
 
+      {/* MOBILE OVERLAY */}
+      {isMobile && sidebarOpen && (
+        <div onClick={() => setSidebarOpen(false)}
+          style={{ position:"fixed", inset:0, background:"rgba(0,0,0,.4)", zIndex:40 }} />
+      )}
+
       {/* SIDEBAR */}
       <div style={{
         position:"fixed", top:0, left:0, height:"100vh", width:260,
         background:"linear-gradient(180deg, #7B0D1E 0%, #B22222 60%, #CD5C5C 100%)",
         zIndex:50, display:"flex", flexDirection:"column",
-        boxShadow:"4px 0 24px rgba(123,13,30,.25)"
+        boxShadow:"4px 0 24px rgba(123,13,30,.25)",
+        transform: isMobile ? (sidebarOpen ? "translateX(0)" : "translateX(-100%)") : "translateX(0)",
+        transition:"transform .3s"
       }}>
 
         {/* LOGO */}
-        <div style={{ padding:"32px 24px 24px", borderBottom:"1px solid rgba(255,255,255,.15)" }}>
-          <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:4 }}>
-            <div style={{ width:36, height:36, borderRadius:10, background:"rgba(255,255,255,.2)", display:"flex", alignItems:"center", justifyContent:"center" }}>
-              <ShieldCheck size={18} color="white" />
+        <div style={{ padding:"32px 24px 24px", borderBottom:"1px solid rgba(255,255,255,.15)", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+          <div>
+            <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:4 }}>
+              <div style={{ width:36, height:36, borderRadius:10, background:"rgba(255,255,255,.2)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                <ShieldCheck size={18} color="white" />
+              </div>
+              <div style={{ color:"white", fontSize:22, fontWeight:800 }}>PEDUMAS</div>
             </div>
-            <div style={{ color:"white", fontSize:22, fontWeight:800 }}>PEDUMAS</div>
+            <div style={{ color:"rgba(255,255,255,.6)", fontSize:12, marginLeft:46 }}>Administrator Panel</div>
           </div>
-          <div style={{ color:"rgba(255,255,255,.6)", fontSize:12, marginLeft:46 }}>Administrator Panel</div>
+          {isMobile && (
+            <button onClick={() => setSidebarOpen(false)}
+              style={{ background:"none", border:"none", color:"white", cursor:"pointer" }}>
+              <X size={20} />
+            </button>
+          )}
         </div>
 
         {/* MENU */}
         <div style={{ padding:"20px 16px", flex:1, display:"flex", flexDirection:"column", gap:4 }}>
           {menus.map((item, i) => (
             <Link key={i} to={item.path}
+              onClick={() => isMobile && setSidebarOpen(false)}
               className={`adm-link ${location.pathname === item.path ? "active" : ""}`}>
               {item.icon}
               {item.title}
@@ -108,20 +128,28 @@ export default function AdminLayout() {
       </div>
 
       {/* CONTENT */}
-      <div style={{ flex:1, marginLeft:260 }}>
+      <div style={{ flex:1, marginLeft: isMobile ? 0 : 260 }}>
 
         {/* TOPBAR */}
         <div style={{
           position:"sticky", top:0, zIndex:30,
           background:"rgba(255,255,255,.92)", backdropFilter:"blur(20px)",
           borderBottom:"1px solid #F5D5D5",
-          padding:"16px 32px",
+          padding: isMobile ? "16px 16px" : "16px 32px",
           display:"flex", alignItems:"center", justifyContent:"space-between"
         }}>
 
-          <div>
-            <div style={{ fontSize:18, fontWeight:800, color:"#1a0505" }}>PEDUMAS</div>
-            <div style={{ fontSize:12, color:"#7a3535" }}>Administrator Panel</div>
+          <div style={{ display:"flex", alignItems:"center", gap:14 }}>
+            {isMobile && (
+              <button onClick={() => setSidebarOpen(true)}
+                style={{ background:"#F5D5D5", border:"none", borderRadius:12, padding:10, cursor:"pointer", color:"#B22222" }}>
+                <Menu size={20} />
+              </button>
+            )}
+            <div>
+              <div style={{ fontSize:18, fontWeight:800, color:"#1a0505" }}>PEDUMAS</div>
+              <div style={{ fontSize:12, color:"#7a3535" }}>Administrator Panel</div>
+            </div>
           </div>
 
           <div style={{ display:"flex", alignItems:"center", gap:16, position:"relative" }}>
@@ -150,8 +178,12 @@ export default function AdminLayout() {
             {/* NOTIF DROPDOWN */}
             {showNotif && (
               <div style={{
-                position:"absolute", top:56, right:0,
-                width:360, background:"white",
+                position: isMobile ? "fixed" : "absolute",
+                top: isMobile ? 70 : 56,
+                right: isMobile ? 12 : 0,
+                left: isMobile ? 12 : "auto",
+                width: isMobile ? "auto" : 360,
+                background:"white",
                 borderRadius:20, boxShadow:"0 20px 60px rgba(0,0,0,.12)",
                 border:"1.5px solid #F5D5D5", overflow:"hidden", zIndex:9999
               }}>
@@ -200,7 +232,8 @@ export default function AdminLayout() {
             <div
               onClick={() => navigate("/admin/profile")}
               style={{
-                background:"white", borderRadius:14, padding:"8px 16px 8px 8px",
+                background:"white", borderRadius:14,
+                padding: isMobile ? "6px 10px 6px 6px" : "8px 16px 8px 8px",
                 border:"1.5px solid #F5D5D5", display:"flex", alignItems:"center", gap:12,
                 boxShadow:"0 2px 12px rgba(0,0,0,.06)", cursor:"pointer", transition:"all .2s"
               }}
@@ -211,17 +244,19 @@ export default function AdminLayout() {
                 src={user?.photo ? `https://backend-pengaduan-production.up.railway.app/uploads/${user.photo}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name||"A")}&background=B22222&color=fff`}
                 alt="" style={{ width:38, height:38, borderRadius:10, objectFit:"cover", border:"2px solid #F5D5D5" }}
               />
-              <div>
-                <div style={{ fontWeight:700, fontSize:14, color:"#B22222" }}>{user?.name}</div>
-                <div style={{ fontSize:11, color:"#7a3535" }}>{user?.role === "super_admin" ? "Super Admin" : "Admin"}</div>
-              </div>
+              {!isMobile && (
+                <div>
+                  <div style={{ fontWeight:700, fontSize:14, color:"#B22222" }}>{user?.name}</div>
+                  <div style={{ fontSize:11, color:"#7a3535" }}>{user?.role === "super_admin" ? "Super Admin" : "Admin"}</div>
+                </div>
+              )}
             </div>
 
           </div>
         </div>
 
         {/* PAGE */}
-        <div style={{ padding:"32px" }}>
+        <div style={{ padding: isMobile ? "16px" : "32px" }}>
           <Outlet />
         </div>
       </div>

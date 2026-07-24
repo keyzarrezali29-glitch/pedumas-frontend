@@ -2,9 +2,11 @@ import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import api from "../../../services/api"
 import { ShieldCheck, Mail, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react"
+import useIsMobile from "../../../hooks/useIsMobile"
 
 export default function Login() {
   const navigate = useNavigate()
+  const isMobile = useIsMobile()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPass, setShowPass] = useState(false)
@@ -27,7 +29,7 @@ export default function Login() {
   }
 
   return (
-    <div style={{ minHeight:"100vh", display:"flex", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"white" }}>
+    <div style={{ minHeight:"100vh", display:"flex", flexDirection: isMobile ? "column" : "row", fontFamily:"'Plus Jakarta Sans',sans-serif", background:"white" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
@@ -75,10 +77,11 @@ export default function Login() {
 
       {/* LEFT PANEL */}
       <div style={{
-        width: "45%", position: "relative", overflow: "hidden",
+        width: isMobile ? "100%" : "45%",
+        position: "relative", overflow: "hidden",
         background: "linear-gradient(160deg, #7B0D1E 0%, #B22222 55%, #CD5C5C 100%)",
         display: "flex", flexDirection: "column", justifyContent: "center",
-        padding: "60px 56px"
+        padding: isMobile ? "40px 24px" : "60px 56px"
       }}>
         {/* Decorative circles */}
         <div style={{ position:"absolute", top:-80, right:-80, width:280, height:280, borderRadius:"50%", background:"rgba(255,255,255,.07)" }} />
@@ -88,14 +91,14 @@ export default function Login() {
         <div style={{ position:"relative", zIndex:10 }}>
 
           {/* Logo */}
-          <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:64 }}>
+          <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom: isMobile ? 24 : 64 }}>
             <div style={{ width:44, height:44, borderRadius:14, background:"rgba(255,255,255,.2)", display:"flex", alignItems:"center", justifyContent:"center" }}>
               <ShieldCheck size={22} color="white" />
             </div>
             <span style={{ color:"white", fontWeight:800, fontSize:20, letterSpacing:"-.02em" }}>PEDUMAS</span>
           </div>
 
-          <h1 style={{ color:"white", fontSize:44, fontWeight:800, lineHeight:1.15, marginBottom:20 }}>
+          <h1 style={{ color:"white", fontSize: isMobile ? 30 : 44, fontWeight:800, lineHeight:1.15, marginBottom:20 }}>
             Selamat<br />Datang<br />Kembali
           </h1>
 
@@ -103,35 +106,39 @@ export default function Login() {
             Masuk ke akun PEDUMAS untuk memantau laporan pengaduan masyarakat secara realtime.
           </p>
 
-          {/* Stats */}
-          <div style={{ marginTop:52, display:"flex", gap:36 }}>
-            {[
-              { v:"2.4K+", l:"Laporan" },
-              { v:"98%",   l:"Kepuasan" },
-              { v:"15K+",  l:"Pengguna" },
-            ].map((s,i) => (
-              <div key={i}>
-                <div style={{ color:"white", fontWeight:800, fontSize:26 }}>{s.v}</div>
-                <div style={{ color:"rgba(255,255,255,.65)", fontSize:13, marginTop:2 }}>{s.l}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Decorative card */}
-          <div style={{
-            marginTop:52, background:"rgba(255,255,255,.12)",
-            borderRadius:20, padding:"20px 24px",
-            backdropFilter:"blur(10px)",
-            border:"1px solid rgba(255,255,255,.15)"
-          }}>
-            <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8 }}>
-              <div style={{ width:8, height:8, borderRadius:"50%", background:"#4ade80" }} />
-              <span style={{ color:"rgba(255,255,255,.9)", fontSize:13, fontWeight:600 }}>Laporan Terbaru Disetujui</span>
+          {/* Stats - disembunyikan di HP biar gak kepanjangan */}
+          {!isMobile && (
+            <div style={{ marginTop:52, display:"flex", gap:36 }}>
+              {[
+                { v:"2.4K+", l:"Laporan" },
+                { v:"98%",   l:"Kepuasan" },
+                { v:"15K+",  l:"Pengguna" },
+              ].map((s,i) => (
+                <div key={i}>
+                  <div style={{ color:"white", fontWeight:800, fontSize:26 }}>{s.v}</div>
+                  <div style={{ color:"rgba(255,255,255,.65)", fontSize:13, marginTop:2 }}>{s.l}</div>
+                </div>
+              ))}
             </div>
-            <p style={{ color:"rgba(255,255,255,.65)", fontSize:12, lineHeight:1.6 }}>
-              Perbaikan Jalan RT 03 — Status berubah menjadi Approved
-            </p>
-          </div>
+          )}
+
+          {/* Decorative card - disembunyikan di HP */}
+          {!isMobile && (
+            <div style={{
+              marginTop:52, background:"rgba(255,255,255,.12)",
+              borderRadius:20, padding:"20px 24px",
+              backdropFilter:"blur(10px)",
+              border:"1px solid rgba(255,255,255,.15)"
+            }}>
+              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8 }}>
+                <div style={{ width:8, height:8, borderRadius:"50%", background:"#4ade80" }} />
+                <span style={{ color:"rgba(255,255,255,.9)", fontSize:13, fontWeight:600 }}>Laporan Terbaru Disetujui</span>
+              </div>
+              <p style={{ color:"rgba(255,255,255,.65)", fontSize:12, lineHeight:1.6 }}>
+                Perbaikan Jalan RT 03 — Status berubah menjadi Approved
+              </p>
+            </div>
+          )}
 
         </div>
       </div>
@@ -139,21 +146,22 @@ export default function Login() {
       {/* RIGHT PANEL */}
       <div style={{
         flex:1, display:"flex", flexDirection:"column",
-        justifyContent:"center", padding:"60px 72px",
+        justifyContent:"center",
+        padding: isMobile ? "32px 20px" : "60px 72px",
         background:"#FAFAFA"
       }}>
 
         {/* Back button */}
-        <div style={{ marginBottom:44 }}>
+        <div style={{ marginBottom: isMobile ? 24 : 44 }}>
           <button className="btn-back" onClick={() => navigate("/")}>
             <ArrowLeft size={16} /> Kembali ke Beranda
           </button>
         </div>
 
-        <div style={{ maxWidth:400, width:"100%" }}>
+        <div style={{ maxWidth:400, width:"100%", margin: isMobile ? "0 auto" : "0" }}>
 
           <div style={{ marginBottom:36 }}>
-            <h2 style={{ fontSize:32, fontWeight:800, color:"#1a0505", marginBottom:8 }}>Masuk ke Akun</h2>
+            <h2 style={{ fontSize: isMobile ? 26 : 32, fontWeight:800, color:"#1a0505", marginBottom:8 }}>Masuk ke Akun</h2>
             <p style={{ color:"#7a3535", fontSize:15 }}>Gunakan email dan password yang terdaftar</p>
           </div>
 
