@@ -1,10 +1,14 @@
-import { LayoutDashboard, LogOut, Crown, ShieldCheck, FileText, UserCircle } from "lucide-react"
+import { LayoutDashboard, LogOut, Crown, ShieldCheck, FileText, UserCircle, Menu, X } from "lucide-react"
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom"
+import { useState } from "react"
+import useIsMobile from "../hooks/useIsMobile"
 
 export default function SuperAdminLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const user = JSON.parse(localStorage.getItem("user") || "{}")
+  const isMobile = useIsMobile()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const menus = [
     { name:"Dashboard",      path:"/superadmin/dashboard", icon:<LayoutDashboard size={20}/> },
@@ -28,23 +32,39 @@ export default function SuperAdminLayout() {
         .sa-logout:hover { background:rgba(255,255,255,.25) !important; }
       `}</style>
 
+      {/* MOBILE OVERLAY */}
+      {isMobile && sidebarOpen && (
+        <div onClick={() => setSidebarOpen(false)}
+          style={{ position:"fixed", inset:0, background:"rgba(0,0,0,.4)", zIndex:40 }} />
+      )}
+
       {/* SIDEBAR */}
       <div style={{
         position:"fixed", top:0, left:0, height:"100vh", width:260,
         background:"linear-gradient(180deg, #7B0D1E 0%, #B22222 60%, #CD5C5C 100%)",
         zIndex:50, display:"flex", flexDirection:"column",
-        boxShadow:"4px 0 24px rgba(123,13,30,.25)"
+        boxShadow:"4px 0 24px rgba(123,13,30,.25)",
+        transform: isMobile ? (sidebarOpen ? "translateX(0)" : "translateX(-100%)") : "translateX(0)",
+        transition:"transform .3s"
       }}>
 
         {/* LOGO */}
-        <div style={{ padding:"32px 24px 24px", borderBottom:"1px solid rgba(255,255,255,.15)" }}>
-          <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:4 }}>
-            <div style={{ width:36, height:36, borderRadius:10, background:"rgba(255,255,255,.2)", display:"flex", alignItems:"center", justifyContent:"center" }}>
-              <Crown size={18} color="white" />
+        <div style={{ padding:"32px 24px 24px", borderBottom:"1px solid rgba(255,255,255,.15)", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+          <div>
+            <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:4 }}>
+              <div style={{ width:36, height:36, borderRadius:10, background:"rgba(255,255,255,.2)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                <Crown size={18} color="white" />
+              </div>
+              <div style={{ color:"white", fontSize:22, fontWeight:800 }}>PEDUMAS</div>
             </div>
-            <div style={{ color:"white", fontSize:22, fontWeight:800 }}>PEDUMAS</div>
+            <div style={{ color:"rgba(255,255,255,.6)", fontSize:12, marginLeft:46 }}>Super Admin Panel</div>
           </div>
-          <div style={{ color:"rgba(255,255,255,.6)", fontSize:12, marginLeft:46 }}>Super Admin Panel</div>
+          {isMobile && (
+            <button onClick={() => setSidebarOpen(false)}
+              style={{ background:"none", border:"none", color:"white", cursor:"pointer" }}>
+              <X size={20} />
+            </button>
+          )}
         </div>
 
         {/* MENU */}
@@ -57,6 +77,7 @@ export default function SuperAdminLayout() {
 
           {menus.map((menu, i) => (
             <Link key={i} to={menu.path}
+              onClick={() => isMobile && setSidebarOpen(false)}
               className={`sa-link ${location.pathname === menu.path ? "active" : ""}`}>
               {menu.icon}
               {menu.name}
@@ -124,36 +145,48 @@ export default function SuperAdminLayout() {
       </div>
 
       {/* CONTENT */}
-      <div style={{ flex:1, marginLeft:260 }}>
+      <div style={{ flex:1, marginLeft: isMobile ? 0 : 260 }}>
 
         {/* TOPBAR */}
         <div style={{
           position:"sticky", top:0, zIndex:30,
           background:"rgba(255,255,255,.92)", backdropFilter:"blur(20px)",
-          borderBottom:"1px solid #F5D5D5", padding:"16px 32px",
+          borderBottom:"1px solid #F5D5D5",
+          padding: isMobile ? "16px" : "16px 32px",
           display:"flex", alignItems:"center", justifyContent:"space-between"
         }}>
-          <div>
-            <div style={{ fontSize:18, fontWeight:800, color:"#1a0505" }}>PEDUMAS</div>
-            <div style={{ fontSize:12, color:"#7a3535" }}>Super Admin Panel</div>
+          <div style={{ display:"flex", alignItems:"center", gap:14 }}>
+            {isMobile && (
+              <button onClick={() => setSidebarOpen(true)}
+                style={{ background:"#F5D5D5", border:"none", borderRadius:12, padding:10, cursor:"pointer", color:"#B22222" }}>
+                <Menu size={20} />
+              </button>
+            )}
+            <div>
+              <div style={{ fontSize:18, fontWeight:800, color:"#1a0505" }}>PEDUMAS</div>
+              <div style={{ fontSize:12, color:"#7a3535" }}>Super Admin Panel</div>
+            </div>
           </div>
           <Link to="/superadmin/profile" style={{
-            background:"#F5D5D5", borderRadius:14, padding:"8px 16px 8px 8px",
+            background:"#F5D5D5", borderRadius:14,
+            padding: isMobile ? "6px 10px 6px 6px" : "8px 16px 8px 8px",
             display:"flex", alignItems:"center", gap:10, textDecoration:"none",
             border:"1.5px solid #E8A0A0", transition:"all .2s"
           }}>
-            <div style={{ width:36, height:36, borderRadius:10, background:"linear-gradient(135deg,#7B0D1E,#B22222)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+            <div style={{ width:36, height:36, borderRadius:10, background:"linear-gradient(135deg,#7B0D1E,#B22222)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
               <span style={{ color:"white", fontWeight:800 }}>{user?.name?.charAt(0)?.toUpperCase()}</span>
             </div>
-            <div>
-              <div style={{ fontWeight:700, fontSize:14, color:"#B22222" }}>{user?.name}</div>
-              <div style={{ fontSize:11, color:"#7a3535" }}>Super Admin</div>
-            </div>
+            {!isMobile && (
+              <div>
+                <div style={{ fontWeight:700, fontSize:14, color:"#B22222" }}>{user?.name}</div>
+                <div style={{ fontSize:11, color:"#7a3535" }}>Super Admin</div>
+              </div>
+            )}
           </Link>
         </div>
 
         {/* PAGE */}
-        <div style={{ padding:"32px" }}>
+        <div style={{ padding: isMobile ? "16px" : "32px" }}>
           <Outlet />
         </div>
       </div>
